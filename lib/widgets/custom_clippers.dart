@@ -1,35 +1,44 @@
 import 'package:flutter/material.dart';
+import 'package:nutriscan/utils/utils.dart';
 
-// Custom top curved clipper
-class TopClipper extends CustomClipper<Path> {
+class BottomClipper extends StatelessWidget {
+  final double height;
+  final Widget? child;
+
+  const BottomClipper({super.key, required this.height, this.child});
+
   @override
-  Path getClip(Size size) {
-    Path path = Path();
-    path.lineTo(0, size.height - 50);
-    path.quadraticBezierTo(
-        size.width / 2, size.height + 30, size.width, size.height - 50);
-    path.lineTo(size.width, 0);
-    path.close();
-    return path;
+  Widget build(BuildContext context) {
+    return Container(
+      height: height,
+      decoration: BoxDecoration(
+        color: AppColors.clipper,
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(60),
+          topRight: Radius.circular(60),
+        ),
+      ),
+      child: child,
+    );
   }
-
-  @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }
 
-// Custom bottom curved clipper
-class BottomClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    Path path = Path();
-    path.moveTo(0, 50);
-    path.quadraticBezierTo(size.width / 2, -30, size.width, 50);
-    path.lineTo(size.width, size.height);
-    path.lineTo(0, size.height);
-    path.close();
-    return path;
-  }
+class TopClipper extends StatelessWidget {
+  final double height;
+
+  const TopClipper({super.key, required this.height});
 
   @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
+  Widget build(BuildContext context) {
+    return Container(
+      height: height,
+      decoration: BoxDecoration(
+        color: AppColors.clipper,
+        borderRadius: const BorderRadius.only(
+          bottomLeft: Radius.circular(60),
+          bottomRight: Radius.circular(60),
+        ),
+      ),
+    );
+  }
 }

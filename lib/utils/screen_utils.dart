@@ -12,4 +12,8 @@ class ScreenUtils {
   static double screenWidth(BuildContext context) {
     return MediaQuery.of(context).size.width;
   }
+
+  static double imageHeight(BuildContext context) {
+    return 450;
+  }
 }

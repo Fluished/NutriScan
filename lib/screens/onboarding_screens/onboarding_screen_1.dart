@@ -23,13 +23,12 @@ class _OnboardingScreen1 extends State<OnboardingScreen1> {
 
   @override
   Widget build(BuildContext context) {
-    double halfScreenHeight = MediaQuery.of(context).size.height * 0.5;
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.background1,
       body: PageView(
         controller: _pageController,
-        scrollDirection: Axis.vertical, // Makes pages scroll UP/DOWN
+        scrollDirection: Axis.vertical,
         onPageChanged: (index) {
           setState(() {
             _currentPage = index;
@@ -38,21 +37,16 @@ class _OnboardingScreen1 extends State<OnboardingScreen1> {
         children: [
           // First Page
           GestureDetector(
-            onTap: _nextPage, // Tap to trigger vertical swipe
+            onTap: _nextPage,
             child: Container(
-              color: AppColors.background,
+              color: AppColors.background1,
               child: Column(
                 children: [
                   Expanded(
                     child: Stack(
                       children: [
-                        ClipPath(
-                          clipper: TopClipper(),
-                          child: Container(
-                            height: halfScreenHeight,
-                            color: AppColors.clipper,
-                          ),
-                        ),
+                        TopClipper(height: ScreenUtils.halfScreenHeight(context)),
+
                         Align(
                           alignment: Alignment.center,
                           child: Column(
@@ -85,9 +79,9 @@ class _OnboardingScreen1 extends State<OnboardingScreen1> {
             ),
           ),
 
-          // Second Page (With Next Button)
+          // Second Page
           Container(
-            color: AppColors.background,
+            color: AppColors.background1,
             child: Column(
               children: [
                 Expanded(
@@ -96,40 +90,36 @@ class _OnboardingScreen1 extends State<OnboardingScreen1> {
                     children: [
                       Image.asset(
                         "assets/landing/landing_asset_1_no_bg.png",
-                        height: 200,
+                        height: ScreenUtils.imageHeight(context),
                       ),
                     ],
                   ),
                 ),
-                ClipPath(
-                  clipper: BottomClipper(),
-                  child: Container(
-                    height: halfScreenHeight,
-                    color: AppColors.clipper,
-                    child: Center(
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.black,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 90,
-                            vertical: 14,
-                          ),
-                        ),
-                        onPressed: () => AppNavigator.push(context, OnboardingScreen2()),
-                        child: Text(
-                          "Next",
-                          style: TextStyle(color: Colors.white),
-                        ),
+                BottomClipper(height: ScreenUtils.halfScreenHeight(context), child:
+
+                Center(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.black,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25),
                       ),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 90,
+                        vertical: 14,
+                      ),
+                    ),
+                    onPressed: () => AppNavigator.push(context, OnboardingScreen2()),
+                    child: Text(
+                      "Next",
+                      style: TextStyle(color: Colors.white),
                     ),
                   ),
                 ),
+                ),
               ],
             ),
-          ),  //Second Page
+          ),
         ],
       ),
     );

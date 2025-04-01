@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../utils/utils.dart';
 
-class OnboardingScreen3 extends StatelessWidget {
-  const OnboardingScreen3({super.key});
+class OnboardingScreen4 extends StatelessWidget {
+  const OnboardingScreen4({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +15,7 @@ class OnboardingScreen3 extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Image.asset(
-                  "assets/landing/landing_asset_3.png",
+                  "assets/landing/landing_asset_4.png",
                   height: ScreenUtils.imageHeight(context),
                 ),
               ],
@@ -50,7 +50,7 @@ class OnboardingScreen3 extends StatelessWidget {
                         vertical: 14,
                       ),
                     ),
-                    onPressed: () => AppNavigator.push(context, OnboardingScreen4()),
+                    onPressed: () => AppNavigator.push(context, OnboardingScreen5()),
                     child: Text(
                       "Next",
                       style: TextStyle(color: Colors.white),

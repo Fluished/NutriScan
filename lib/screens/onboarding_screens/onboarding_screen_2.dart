@@ -7,7 +7,7 @@ class OnboardingScreen2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.background1,
       body: Column(
         children: [
           Expanded(
@@ -16,61 +16,56 @@ class OnboardingScreen2 extends StatelessWidget {
               children: [
                 Image.asset(
                   "assets/landing/landing_asset_2.png",
-                  height: 450,
+                  height: ScreenUtils.imageHeight(context),
                 ),
               ],
             ),
           ),
 
-          ClipPath(
-            clipper: BottomClipper(),
+          BottomClipper(
+            height: ScreenUtils.halfScreenHeight(context),
             child: Container(
-              height: ScreenUtils.halfScreenHeight(context),
-              color: AppColors.clipper,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "How to know your food?",
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
+              width: ScreenUtils.screenWidth(context),
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "How to know your food?",
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                  SizedBox(height: 12),
+                  Text(
+                    "NutriScan helps the user to make smarter food choices by scanning barcodes for instant nutritional info, and personal insights based on dietary needs.",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.black,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 90,
+                        vertical: 14,
                       ),
                     ),
-                    SizedBox(height: 12),
-                    Text(
-                      "NutriScan helps the user to make smarter food choices by scanning barcodes for instant nutritional info, and personal insights based on dietary needs.",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.white
-                      ),
+                    onPressed: () => AppNavigator.push(context, OnboardingScreen3()),
+                    child: Text(
+                      "Next",
+                      style: TextStyle(color: Colors.white),
                     ),
-                    SizedBox(height: 20),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 90,
-                          vertical: 14,
-                        ),
-                      ),
-                      onPressed: () {
-                        //TODO
-                      },
-                      child: Text(
-                        "Next",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),

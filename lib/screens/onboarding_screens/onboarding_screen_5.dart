@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import '../../utils/utils.dart';
 
-class OnboardingScreen3 extends StatelessWidget {
-  const OnboardingScreen3({super.key});
+class OnboardingScreen5 extends StatelessWidget {
+  const OnboardingScreen5({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background2,
+      backgroundColor: AppColors.background3,
       body: Column(
         children: [
           Expanded(
@@ -15,7 +15,7 @@ class OnboardingScreen3 extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Image.asset(
-                  "assets/landing/landing_asset_3.png",
+                  "assets/landing/landing_asset_5.png",
                   height: ScreenUtils.imageHeight(context),
                 ),
               ],
@@ -31,7 +31,7 @@ class OnboardingScreen3 extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Scan smarter with NutriScan",
+                    "Healthy shopping tips",
                     style: TextStyle(
                       fontSize: 25,
                       fontWeight: FontWeight.bold,
@@ -50,9 +50,11 @@ class OnboardingScreen3 extends StatelessWidget {
                         vertical: 14,
                       ),
                     ),
-                    onPressed: () => AppNavigator.push(context, OnboardingScreen4()),
+                    onPressed: () {
+                      // TODO: Implement navigation
+                    },
                     child: Text(
-                      "Next",
+                      "Let's Start",
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
