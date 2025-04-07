@@ -50,9 +50,7 @@ class OnboardingScreen5 extends StatelessWidget {
                         vertical: 14,
                       ),
                     ),
-                    onPressed: () {
-                      // TODO: Implement navigation
-                    },
+                    onPressed: () => AppNavigator.push(context, OnboardingScreen6()),
                     child: Text(
                       "Let's Start",
                       style: TextStyle(color: Colors.white),

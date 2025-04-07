@@ -7,7 +7,7 @@ class OnboardingScreen4 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background2,
+      backgroundColor: AppColors.background4,
       body: Column(
         children: [
           Expanded(
@@ -31,10 +31,18 @@ class OnboardingScreen4 extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Scan smarter with NutriScan",
+                    "How the scanner works",
                     style: TextStyle(
                       fontSize: 25,
                       fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                  Text(
+                    "Barcode Scanning, Nutritional breakdown, Allergen detection",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 16,
                       color: Colors.white,
                     ),
                   ),
