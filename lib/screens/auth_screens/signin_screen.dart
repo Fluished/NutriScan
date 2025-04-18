@@ -1,21 +1,18 @@
 import 'package:flutter/material.dart';
-import '../../utils/utils.dart';
+import '../../../utils/utils.dart';
 
-class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({super.key});
+class SignInScreen extends StatefulWidget {
+  const SignInScreen({super.key});
 
   @override
-  State<SignUpScreen> createState() => _SignUpScreenState();
+  State<SignInScreen> createState() => _SignInScreenState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
+class _SignInScreenState extends State<SignInScreen> {
   bool _isPasswordVisible = false;
-  bool _isConfirmPasswordVisible = false;
 
   @override
   Widget build(BuildContext context) {
-    final mediaQuery = MediaQuery.of(context).size;
-
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -35,21 +32,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
               const SizedBox(height: 10),
               const Text(
-                "Create your Account",
+                "Log In",
                 style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 20),
 
               // Illustration Image
               Image.asset(
-                'assets/login_asset.png',
-                height: mediaQuery.height * 0.22,
+                'assets/auth/login_asset.png',
+                height: ScreenUtils.imageHeightHalf(context),
               ),
               const SizedBox(height: 10),
 
-              // Form Fields
-              _buildTextField(icon: Icons.person, hint: "Name"),
-              const SizedBox(height: 10),
 
               _buildTextField(icon: Icons.email, hint: "Email or Phone number"),
               const SizedBox(height: 10),
@@ -63,22 +57,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
               const SizedBox(height: 10),
 
-              _buildPasswordField(
-                hint: "Confirm Password",
-                isVisible: _isConfirmPasswordVisible,
-                onToggle: () => setState(() {
-                  _isConfirmPasswordVisible = !_isConfirmPasswordVisible;
-                }),
-              ),
-              const SizedBox(height: 12),
-
-              // Sign Up Button
+              // Sign In Button
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {
-                    // Submit logic
-                  },
+                  onPressed: () => AppNavigator.push(context, ScreenHandler()),
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     backgroundColor: Colors.black,
@@ -86,12 +69,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  child: const Text("Sign Up", style: TextStyle(color: Colors.white)),
+                  child: const Text("Sign In", style: TextStyle(color: Colors.white)),
                 ),
               ),
 
               const SizedBox(height: 10),
-              const Text("or sign up with"),
+              const Text("or sign in with"),
               const SizedBox(height: 10),
 
               // Social Buttons
@@ -112,9 +95,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: const [
-                  Text("Already have an account? "),
+                  Text("Don't have an account? "),
                   Text(
-                    "Log In",
+                    "Sign Up",
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ],

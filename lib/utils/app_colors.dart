@@ -8,5 +8,4 @@ class AppColors {
 
   static const Color clipper = Color(0xFF7179a7);
   static const Color buttonColor = Colors.black;
-  static const Color white = Colors.white;
 }

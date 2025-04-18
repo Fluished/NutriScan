@@ -13,6 +13,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      title: 'NutriScan',
+      theme: ThemeData(
+        fontFamily: 'Poppins',
+        scaffoldBackgroundColor: Colors.white,
+        textTheme: ThemeData.light().textTheme.apply(
+          fontFamily: 'Poppins',
+        ),
+      ),
       home: OnboardingScreen1()
     );
   }

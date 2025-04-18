@@ -2,10 +2,19 @@
 export 'app_colors.dart';
 export 'navigator.dart';
 export 'screen_utils.dart';
-export '../widgets/custom_clippers.dart';
+export 'screen_handler.dart';
+export 'scanned_items.dart';
 
-// fonts
+// packages
 export 'package:font_awesome_flutter/font_awesome_flutter.dart';
+export 'package:flutter_floating_bottom_bar/flutter_floating_bottom_bar.dart';
+export 'package:mobile_scanner/mobile_scanner.dart';
+
+// widgets
+export '../widgets/custom_clippers.dart';
+export '../widgets/allergen_widget.dart';
+export '../widgets/app_bar.dart';
+
 
 // screens
 
@@ -18,5 +27,9 @@ export '../screens/onboarding_screens/onboarding_screen_5.dart';
 export '../screens/onboarding_screens/onboarding_screen_6.dart';
 
 // sign up/in screens
-export '../screens/signup_screen.dart';
-export '../screens/signin_screen.dart';
+export '../screens/auth_screens/signup_screen.dart';
+export '../screens/auth_screens/signin_screen.dart';
+export '../screens/auth_screens/complete_profile_screen.dart';
+
+// home
+export '../screens/home_screen.dart';
