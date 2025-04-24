@@ -12,18 +12,19 @@ class _ScreenHandlerState extends State<ScreenHandler> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = [
+    // const Center(child: Text("Favorites Page")), // DEFAULT
     const HomeScreen(),
     const Center(child: Text("Meals Page")),
-    const Center(child: Text("History Page")),
-    const Center(child: Text("Favorites Page")),
-    const Center(child: Text("Profile Page")),
+    const HistoryScreen(),
+    const SavedProductsScreen(),
+    const ProfileScreen(),
   ];
 
   final List<String> _titles = [
     "Home",
     "Meals",
-    "History",
-    "Favorites",
+    "Scan History",
+    "Saved Products",
     "Profile",
   ];
 

@@ -82,7 +82,6 @@ class BarcodeScannerScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Scan a Barcode')),
       body: MobileScanner(
         controller: MobileScannerController(
           facing: CameraFacing.back,

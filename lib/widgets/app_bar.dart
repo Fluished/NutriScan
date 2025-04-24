@@ -19,6 +19,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         title,
         style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
       ),
+      centerTitle: true,
       leading: Padding(
         padding: const EdgeInsets.all(10.0),
         child: CircleAvatar(

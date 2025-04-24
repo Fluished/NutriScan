@@ -2,7 +2,6 @@
 export 'app_colors.dart';
 export 'navigator.dart';
 export 'screen_utils.dart';
-export 'screen_handler.dart';
 export 'scanned_items.dart';
 
 // packages
@@ -31,5 +30,12 @@ export '../screens/auth_screens/signup_screen.dart';
 export '../screens/auth_screens/signin_screen.dart';
 export '../screens/auth_screens/complete_profile_screen.dart';
 
-// home
-export '../screens/home_screen.dart';
+// main screens
+
+// main screens handler
+export '../screens/screen_handler.dart';
+
+export '../screens/main/home_screen.dart';
+export '../screens/main/profile_screen.dart';
+export '../screens/main/saved_products_screen.dart';
+export '../screens/main/scan_history_screen.dart';
