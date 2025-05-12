@@ -76,23 +76,36 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-class BarcodeScannerScreen extends StatelessWidget {
+class BarcodeScannerScreen extends StatefulWidget {
   const BarcodeScannerScreen({super.key});
+
+  @override
+  State<BarcodeScannerScreen> createState() => _BarcodeScannerScreenState();
+}
+
+class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
+  final MobileScannerController controller = MobileScannerController();
+  bool _isScanned = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: MobileScanner(
-        controller: MobileScannerController(
-          facing: CameraFacing.back,
-        ),
+        controller: controller,
         onDetect: (capture) {
+          if (_isScanned) return; // prevent multiple detections
+          _isScanned = true;
+
           final barcode = capture.barcodes.first;
           final value = barcode.rawValue ?? "---";
 
-          // You can also use Navigator.pop(context, value); to return result
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Scanned: $value')),
+          controller.stop();
+
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (_) => ProductDetailsScreen(barcode: value),
+            ),
           );
         },
       ),

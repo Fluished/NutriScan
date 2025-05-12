@@ -39,3 +39,5 @@ export '../screens/main/home_screen.dart';
 export '../screens/main/profile_screen.dart';
 export '../screens/main/saved_products_screen.dart';
 export '../screens/main/scan_history_screen.dart';
+
+export '../screens/product_details_screen.dart';
