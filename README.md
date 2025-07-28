@@ -1,4 +1,4 @@
-# test_flutter
+# NutriScan
 
 A new Flutter project.
 
