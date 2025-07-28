@@ -18,6 +18,6 @@ class ScreenUtils {
   }
 
   static double imageHeightHalf(BuildContext context) {
-    return MediaQuery.of(context).size.height * 0.22;
+    return MediaQuery.of(context).size.height * 0.2;
   }
 }

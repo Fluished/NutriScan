@@ -30,10 +30,15 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  font_awesome_flutter: ^10.5.0
+  font_awesome_flutter: ^10.6.0
   flutter_floating_bottom_bar: ^1.3.0
+  flutter_dotenv: ^5.0.2
   mobile_scanner: ^3.2.0
-
+  firebase_core: ^2.24.0
+  firebase_auth: ^4.20.0
+  cloud_firestore: ^4.17.5
+  http: ^1.2.2
+  shared_preferences: ^2.2.2
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
@@ -94,6 +99,7 @@ flutter:
     - assets/
     - assets/landing/
     - assets/auth/
+    - .env
   fonts:
     - family: Poppins
       fonts:

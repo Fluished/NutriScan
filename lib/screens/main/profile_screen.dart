@@ -1,15 +1,46 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import '../../services/auth_service.dart';
+import '../../services/firestore_service.dart';
+import '../../models/user_model.dart';
+import '../../widgets/allergen_widget.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
   @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  final AuthService _authService = AuthService();
+  final FirestoreService _firestoreService = FirestoreService();
+  UserModel? user;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserProfile();
+  }
+
+  Future<void> _loadUserProfile() async {
+    UserModel? fetchedUser =
+    await _firestoreService.getUserProfile(_authService.getCurrentUser()!.uid);
+    setState(() {
+      user = fetchedUser;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    if (user == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
         children: [
-          // Profile Picture and Edit Button
           Stack(
             alignment: Alignment.topRight,
             children: [
@@ -20,65 +51,44 @@ class ProfileScreen extends StatelessWidget {
                     backgroundColor: Colors.grey,
                   ),
                   const SizedBox(height: 8),
-                  const Text(
-                    "First S. Last",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  Text(
+                    "${user!.firstName} ${user!.lastName}",
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                   ),
                   const SizedBox(height: 4),
-                  const Text(
-                    "A Health Enthusiast",
-                    style: TextStyle(color: Colors.grey),
+                  Text(
+                    user!.bio.isNotEmpty ? user!.bio : "",
+                    style: const TextStyle(color: Colors.grey),
                   ),
                 ],
               ),
-
-              // Edit Button ==============
-              // Positioned(
-              //   top: 0,
-              //   right: 0,
-              //   child: ElevatedButton.icon(
-              //     onPressed: () {},
-              //     icon: const Icon(Icons.edit, size: 16),
-              //     label: const Text("Edit"),
-              //     style: ElevatedButton.styleFrom(
-              //       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-              //       backgroundColor: Colors.white,
-              //       foregroundColor: Colors.black,
-              //       side: const BorderSide(color: Colors.black12),
-              //       shape: StadiumBorder(),
-              //     ),
-              //   ),
-              // ),
             ],
           ),
           const Divider(height: 32, thickness: 1.2),
-
-          // Personal Info
           Align(
             alignment: Alignment.centerLeft,
-            child: Text("Personal Information", style: Theme.of(context).textTheme.titleMedium),
+            child: Text(
+              "Personal Information",
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
           ),
           const SizedBox(height: 16),
-
           Row(
             children: [
-              Expanded(child: _buildInputBox("First Name", "First")),
+              Expanded(child: _buildInputBox("First Name", user!.firstName)),
               const SizedBox(width: 8),
-              Expanded(child: _buildInputBox("Last Name", "Last")),
+              Expanded(child: _buildInputBox("Last Name", user!.lastName)),
             ],
           ),
           const SizedBox(height: 8),
           Row(
             children: [
-              Expanded(child: _buildInputBox("Email Address", "test.email@email.test")),
+              Expanded(child: _buildInputBox("Email Address", _authService.getCurrentUser()!.email ?? "")),
               const SizedBox(width: 8),
-              Expanded(child: _buildInputBox("Phone No.", "09121234321")),
+              Expanded(child: _buildInputBox("Phone No.", user!.phoneNumber)),
             ],
           ),
-
           const SizedBox(height: 24),
-
-          // Allergen Section
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
@@ -92,7 +102,24 @@ class ProfileScreen extends StatelessWidget {
                   children: [
                     const Text("Allergen Profile", style: TextStyle(fontWeight: FontWeight.bold)),
                     const Spacer(),
-                    IconButton(onPressed: () {}, icon: const Icon(Icons.add_circle_outline)),
+                    IconButton(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (_) => AllergenWidget(
+                            initialAllergens: user!.allergens,
+                            onAllergensSelected: (selectedAllergens) async {
+                              await _firestoreService.updateUserAllergens(
+                                _authService.getCurrentUser()!.uid,
+                                selectedAllergens,
+                              );
+                              _loadUserProfile();
+                            },
+                          ),
+                        );
+                      },
+                      icon: const Icon(Icons.add_circle_outline),
+                    ),
                   ],
                 ),
                 const Text("User Allergens", style: TextStyle(fontSize: 12)),
@@ -100,15 +127,9 @@ class ProfileScreen extends StatelessWidget {
                 Wrap(
                   spacing: 8,
                   runSpacing: 8,
-                  children: List.generate(3, (_) => _buildPill()),
-                ),
-                const SizedBox(height: 16),
-                const Text("Suggested Allergens", style: TextStyle(fontSize: 12)),
-                const SizedBox(height: 8),
-                Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: List.generate(6, (_) => _buildPill()),
+                  children: user!.allergens.isNotEmpty
+                      ? user!.allergens.map((allergen) => _buildPill(allergen)).toList()
+                      : [const Text("No allergens selected")],
                 ),
               ],
             ),
@@ -123,9 +144,7 @@ class ProfileScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(label, style: const TextStyle(fontSize: 12, color: Colors.grey)),
-
         const SizedBox(height: 4),
-
         Container(
           height: 60,
           padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -140,13 +159,63 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildPill() {
+  Widget _buildPill(String allergen) {
     return Container(
-      width: 80,
       height: 28,
+      padding: const EdgeInsets.only(left: 12, right: 4),
       decoration: BoxDecoration(
         color: Colors.grey[300],
         borderRadius: BorderRadius.circular(20),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Flexible(
+            child: Text(
+              allergen,
+              style: const TextStyle(fontSize: 12),
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          IconButton(
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(),
+            icon: const Icon(Icons.close, size: 16),
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: const Text('Remove Allergen'),
+                  content: Text('Remove $allergen from your profile?'),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text('Cancel'),
+                    ),
+                    TextButton(
+                      onPressed: () async {
+                        Navigator.pop(context);
+                        try {
+                          final updatedAllergens = List<String>.from(user!.allergens)..remove(allergen);
+                          await _firestoreService.updateUserAllergens(
+                            _authService.getCurrentUser()!.uid,
+                            updatedAllergens,
+                          );
+                          await _loadUserProfile();
+                        } catch (e) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Failed to remove allergen: $e')),
+                          );
+                        }
+                      },
+                      child: const Text('Remove'),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ],
       ),
     );
   }

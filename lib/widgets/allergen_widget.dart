@@ -1,104 +1,116 @@
 import 'package:flutter/material.dart';
+import '../utils/app_colors.dart';
 
 class AllergenWidget extends StatefulWidget {
-  final VoidCallback onDone;
+  final List<String> initialAllergens;
+  final Function(List<String>) onAllergensSelected;
 
-  const AllergenWidget({super.key, required this.onDone});
+  const AllergenWidget({
+    super.key,
+    this.initialAllergens = const [], // Optional, defaults to empty list
+    required this.onAllergensSelected,
+  });
 
   @override
-  State<AllergenWidget> createState() => _AllergenDialogState();
+  State<AllergenWidget> createState() => _AllergenWidgetState();
 }
 
-class _AllergenDialogState extends State<AllergenWidget> {
-  List<String> allergens = [
-    'celery', 'crustaceans', 'fish', 'sesame', 'milk', 'soybeans',
-    'eggs', 'gluten', 'mollusks', 'sulphur dioxide', 'lupin', 'peanuts',
-    'sulphites', 'mustard', 'tree nuts'
+class _AllergenWidgetState extends State<AllergenWidget> {
+  final List<String> commonAllergens = [
+    'peanuts',
+    'milk',
+    'eggs',
+    'soy',
+    'wheat',
+    'fish',
+    'shellfish',
+    'tree nuts',
   ];
+  late List<String> selectedAllergens;
+  bool _isLoading = false;
 
-  Set<String> selected = {};
+  @override
+  void initState() {
+    super.initState();
+    // Initialize with initialAllergens (defaults to [] if not provided)
+    selectedAllergens = List.from(widget.initialAllergens);
+  }
+
+  Future<void> _handleSaveAllergens(bool skip) async {
+    setState(() => _isLoading = true);
+    try {
+      List<String> allergensToSave;
+      if (skip) {
+        // Skip clears allergens
+        allergensToSave = [];
+      } else {
+        // Done: Save selected allergens, or keep initialAllergens if none selected
+        allergensToSave = selectedAllergens.isEmpty ? widget.initialAllergens : selectedAllergens;
+      }
+      // Call callback with allergens to save
+      widget.onAllergensSelected(allergensToSave);
+      // Close dialog
+      Navigator.pop(context);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error saving allergens: $e')),
+      );
+    } finally {
+      setState(() => _isLoading = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      title: Center(
-        child: Text(
-          'Allergen Set Up',
-          style: TextStyle(fontWeight: FontWeight.bold),
+    return Theme(
+      data: Theme.of(context).copyWith(
+        dialogBackgroundColor: Colors.white,
+        unselectedWidgetColor: Colors.black, // For checkbox border when unchecked
+        checkboxTheme: CheckboxThemeData(
+          fillColor: MaterialStateProperty.resolveWith<Color>((states) {
+            if (states.contains(MaterialState.selected)) {
+              return Colors.black; // Checkmark color
+            }
+            return Colors.white; // Default fill
+          }),
+          checkColor: MaterialStateProperty.all(Colors.white), // Color of the check inside box
+          side: const BorderSide(color: Colors.black), // Border when not selected
         ),
       ),
-      content: SingleChildScrollView(
-        child: Column(
-          children: [
-            Divider(),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: allergens.map((item) {
-                final isSelected = selected.contains(item);
-                return ChoiceChip(
-                  label: Text(item),
-                  selected: isSelected,
-                  selectedColor: Colors.black,
-                  backgroundColor: Colors.transparent,
-                  labelStyle: TextStyle(
-                    color: isSelected ? Colors.white : Colors.black,
-                  ),
-                  shape: StadiumBorder(
-                    side: BorderSide(color: Colors.black),
-                  ),
-                  onSelected: (val) {
-                    setState(() {
-                      if (isSelected) {
-                        selected.remove(item);
-                      } else {
-                        selected.add(item);
-                      }
-                    });
-                  },
-                );
-              }).toList(),
-            ),
-            const SizedBox(height: 24),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context); // Close the dialog
-                    widget.onDone(); // Navigate to next screen
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.grey,
-                    shape: StadiumBorder(),
-                  ),
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                    child: Text("Skip", style: TextStyle(color: Colors.white)),
-                  ),
-                ),
-
-                const SizedBox(width: 16),
-
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context); // Close the dialog
-                    widget.onDone(); // Navigate to next screen
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
-                    shape: StadiumBorder(),
-                  ),
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                    child: Text("Done", style: TextStyle(color: Colors.white)),
-                  ),
-                ),
-              ],
-            )
-          ],
+      child: AlertDialog(
+        title: const Text("Select Your Allergens"),
+        content: SingleChildScrollView(
+          child: Column(
+            children: commonAllergens.map((allergen) {
+              return CheckboxListTile(
+                title: Text(allergen, style: const TextStyle(color: Colors.black)),
+                value: selectedAllergens.contains(allergen),
+                onChanged: _isLoading
+                    ? null
+                    : (bool? value) {
+                  setState(() {
+                    if (value == true) {
+                      selectedAllergens.add(allergen);
+                    } else {
+                      selectedAllergens.remove(allergen);
+                    }
+                  });
+                },
+              );
+            }).toList(),
+          ),
         ),
+        actions: [
+          TextButton(
+            onPressed: _isLoading ? null : () => _handleSaveAllergens(false),
+            style: TextButton.styleFrom(
+              foregroundColor: Colors.black,
+            ),
+            child: _isLoading
+                ? const CircularProgressIndicator()
+                : const Text("Done"),
+          ),
+        ],
       ),
     );
   }

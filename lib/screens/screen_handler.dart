@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nutriscan/utils/utils.dart';
+import '../services/auth_service.dart';
 
 class ScreenHandler extends StatefulWidget {
   const ScreenHandler({super.key});
@@ -10,11 +11,11 @@ class ScreenHandler extends StatefulWidget {
 
 class _ScreenHandlerState extends State<ScreenHandler> {
   int _selectedIndex = 0;
+  final AuthService _authService = AuthService();
 
   final List<Widget> _pages = [
-    // const Center(child: Text("Favorites Page")), // DEFAULT
     const HomeScreen(),
-    const Center(child: Text("Meals Page")),
+    const HealthyTipsScreen(),
     const HistoryScreen(),
     const SavedProductsScreen(),
     const ProfileScreen(),
@@ -22,7 +23,7 @@ class _ScreenHandlerState extends State<ScreenHandler> {
 
   final List<String> _titles = [
     "Home",
-    "Meals",
+    "Healthy Tips",
     "Scan History",
     "Saved Products",
     "Profile",
@@ -44,16 +45,24 @@ class _ScreenHandlerState extends State<ScreenHandler> {
       barColor: Colors.black,
       body: (context, controller) => Scaffold(
         backgroundColor: Colors.white,
-        appBar: CustomAppBar(title: _titles[_selectedIndex]), // Top Bar
+        appBar: CustomAppBar(title: _titles[_selectedIndex]),
         endDrawer: Drawer(
           child: ListView(
             padding: EdgeInsets.zero,
-            children: const [
-              DrawerHeader(
+            children: [
+              const DrawerHeader(
                 decoration: BoxDecoration(color: AppColors.clipper),
-                child: Text('Menu', style: TextStyle(color: Colors.white, fontSize: 24)),
+                child: Text('Options', style: TextStyle(color: Colors.black, fontSize: 24, fontWeight: FontWeight.bold)),
               ),
-              ListTile(leading: Icon(Icons.settings), title: Text('Settings')),
+              const ListTile(leading: Icon(Icons.settings), title: Text('Settings')),
+              ListTile(
+                leading: Icon(Icons.logout),
+                title: Text('Sign Out'),
+                onTap: () async {
+                  await _authService.signOut();
+                  AppNavigator.pushAndRemoveUntil(context, SignInScreen());
+                },
+              ),
             ],
           ),
         ),
